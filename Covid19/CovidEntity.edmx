@@ -1,0 +1,162 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="Covid1920200603125049_dbModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012.Azure" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="CountryWiseCases">
+          <Key>
+            <PropertyRef Name="CountryId" />
+          </Key>
+          <Property Name="CountryId" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="ContryName" Type="nvarchar" MaxLength="50" />
+          <Property Name="TotalCasesPercentage" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="TotalCases" Type="bigint" />
+        </EntityType>
+        <EntityType Name="CountryWiseTotalCasesByDay">
+          <Key>
+            <PropertyRef Name="CaseId" />
+          </Key>
+          <Property Name="CaseId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CountryName" Type="nvarchar" MaxLength="20" />
+          <Property Name="Day" Type="int" />
+          <Property Name="TotalCases" Type="bigint" />
+        </EntityType>
+        <EntityType Name="DailyNewCase">
+          <Key>
+            <PropertyRef Name="NCaseId" />
+          </Key>
+          <Property Name="NCaseId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Date" Type="varchar" MaxLength="15" />
+          <Property Name="NewCase" Type="bigint" />
+        </EntityType>
+        <EntityType Name="NoofDeathByDay">
+          <Key>
+            <PropertyRef Name="DeathId" />
+          </Key>
+          <Property Name="DeathId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CountryName" Type="nvarchar" MaxLength="20" />
+          <Property Name="Day" Type="int" />
+          <Property Name="TotalDeath" Type="bigint" />
+        </EntityType>
+        <EntityContainer Name="Covid1920200603125049_dbModelStoreContainer">
+          <EntitySet Name="CountryWiseCases" EntityType="Self.CountryWiseCases" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CountryWiseTotalCasesByDay" EntityType="Self.CountryWiseTotalCasesByDay" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DailyNewCase" EntityType="Self.DailyNewCase" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="NoofDeathByDay" EntityType="Self.NoofDeathByDay" Schema="dbo" store:Type="Tables" />
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="Covid1920200603125049_dbModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="Covid1920200603125049_dbEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="CountryWiseCases" EntityType="Covid1920200603125049_dbModel.CountryWiseCas" />
+          <EntitySet Name="CountryWiseTotalCasesByDays" EntityType="Covid1920200603125049_dbModel.CountryWiseTotalCasesByDay" />
+          <EntitySet Name="NoofDeathByDays" EntityType="Covid1920200603125049_dbModel.NoofDeathByDay" />
+          <EntitySet Name="DailyNewCases" EntityType="Covid1920200603125049_dbModel.DailyNewCase" />
+        </EntityContainer>
+        <EntityType Name="CountryWiseCas">
+          <Key>
+            <PropertyRef Name="CountryId" />
+          </Key>
+          <Property Name="CountryId" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="ContryName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="TotalCasesPercentage" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="TotalCases" Type="Int64" />
+        </EntityType>
+        <EntityType Name="CountryWiseTotalCasesByDay">
+          <Key>
+            <PropertyRef Name="CaseId" />
+          </Key>
+          <Property Name="CaseId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CountryName" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Day" Type="Int32" />
+          <Property Name="TotalCases" Type="Int64" />
+        </EntityType>
+        <EntityType Name="NoofDeathByDay">
+          <Key>
+            <PropertyRef Name="DeathId" />
+          </Key>
+          <Property Name="DeathId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CountryName" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Day" Type="Int32" />
+          <Property Name="TotalDeath" Type="Int64" />
+        </EntityType>
+        <EntityType Name="DailyNewCase">
+          <Key>
+            <PropertyRef Name="NCaseId" />
+          </Key>
+          <Property Name="NCaseId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Date" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="NewCase" Type="Int64" />
+        </EntityType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Covid1920200603125049_dbModelStoreContainer" CdmEntityContainer="Covid1920200603125049_dbEntities">
+          <EntitySetMapping Name="CountryWiseCases">
+            <EntityTypeMapping TypeName="Covid1920200603125049_dbModel.CountryWiseCas">
+              <MappingFragment StoreEntitySet="CountryWiseCases">
+                <ScalarProperty Name="TotalCases" ColumnName="TotalCases" />
+                <ScalarProperty Name="TotalCasesPercentage" ColumnName="TotalCasesPercentage" />
+                <ScalarProperty Name="ContryName" ColumnName="ContryName" />
+                <ScalarProperty Name="CountryId" ColumnName="CountryId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CountryWiseTotalCasesByDays">
+            <EntityTypeMapping TypeName="Covid1920200603125049_dbModel.CountryWiseTotalCasesByDay">
+              <MappingFragment StoreEntitySet="CountryWiseTotalCasesByDay">
+                <ScalarProperty Name="TotalCases" ColumnName="TotalCases" />
+                <ScalarProperty Name="Day" ColumnName="Day" />
+                <ScalarProperty Name="CountryName" ColumnName="CountryName" />
+                <ScalarProperty Name="CaseId" ColumnName="CaseId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="NoofDeathByDays">
+            <EntityTypeMapping TypeName="Covid1920200603125049_dbModel.NoofDeathByDay">
+              <MappingFragment StoreEntitySet="NoofDeathByDay">
+                <ScalarProperty Name="TotalDeath" ColumnName="TotalDeath" />
+                <ScalarProperty Name="Day" ColumnName="Day" />
+                <ScalarProperty Name="CountryName" ColumnName="CountryName" />
+                <ScalarProperty Name="DeathId" ColumnName="DeathId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DailyNewCases">
+            <EntityTypeMapping TypeName="Covid1920200603125049_dbModel.DailyNewCase">
+              <MappingFragment StoreEntitySet="DailyNewCase">
+                <ScalarProperty Name="NewCase" ColumnName="NewCase" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="NCaseId" ColumnName="NCaseId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

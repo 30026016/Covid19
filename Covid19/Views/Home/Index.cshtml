@@ -1,0 +1,399 @@
+﻿@{
+    ViewBag.Title = "Special Topic - Covid-19";
+}
+
+<script src="~/Scripts/highcharts.js"></script>
+
+<div class="row">
+    <div class="col-xl-4 col-lg-6 col-md-6 col-sm-6">
+        <div class="card card-stats">
+            <div class="card-header card-header-warning card-header-icon">
+                <div class="card-icon">
+                    <i class="material-icons">announcement</i>
+                </div>
+                <p class="card-category">Corona Virus Cases</p>
+                <h3 class="card-title">
+                    6,698,620
+                    <small>Cases</small>
+                </h3>
+            </div>
+            <div class="card-footer">
+                <div class="stats">
+                    <i class="material-icons text-warning">warning</i>
+                    <a class="warning-link">Stay Safe...</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-4 col-lg-6 col-md-6 col-sm-6">
+        <div class="card card-stats">
+            <div class="card-header card-header-success card-header-icon">
+                <div class="card-icon">
+                    <i class="material-icons">store</i>
+                </div>
+                <p class="card-category">Recovered</p>
+                <h3 class="card-title">3,249,462</h3>
+            </div>
+            <div class="card-footer">
+                <div class="stats">
+                    <i class="material-icons">date_range</i> Last 24 Hours
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-4 col-lg-6 col-md-6 col-sm-6">
+        <div class="card card-stats">
+            <div class="card-header card-header-danger card-header-icon">
+                <div class="card-icon">
+                    <i class="material-icons">info_outline</i>
+                </div>
+                <p class="card-category">Deaths</p>
+                <h3 class="card-title">393,142</h3>
+            </div>
+            <div class="card-footer">
+                <div class="stats">
+                    <i class="material-icons">update</i> Just Updated
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-xl-12 col-lg-12">
+        <div class="card card-chart">
+            <div class="card-header card-header-success">
+                <div class="ct-chart" id="container"></div>
+            </div>
+            <div class="card-body">
+                <h4 class="card-title">
+                    Country Wise Total Cases
+                </h4>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-12 col-lg-12">
+        <div class="card card-chart">
+            <div class="card-header card-header-warning">
+                <div class="ct-chart" id="dayContainer"></div>
+            </div>
+            <div class="card-body">
+                <h4 class="card-title">
+                    Day Wise Number of Cases
+                </h4>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-12 col-lg-12">
+        <div class="card card-chart">
+            <div class="card-header card-header-danger">
+                <div class="ct-chart" id="deathContainer"></div>
+            </div>
+            <div class="card-body">
+                <h4 class="card-title">
+                    Day Wise Number of Deaths
+                </h4>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-12 col-lg-12">
+        <div class="card card-chart">
+            <div class="card-header card-header-info">
+                <div class="ct-chart" id="newCaseContainer"></div>
+            </div>
+            <div class="card-body">
+                <h4 class="card-title">
+                    Daily New Cases
+                </h4>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        TotalCases();
+        DayWiseTotalCases();
+        NoofDeathByDay();
+        DailyNewCases();
+    });
+
+    function TotalCases() {
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetCountryWiseData","Home")',
+            data: "{}",
+            dataType: "json",
+            success: function (data) {
+                drawChart(data);
+            },
+            error: function () {
+                console.log('Error');
+            }
+        });
+    }
+
+    function drawChart(chartData) {
+        $('#container').highcharts({
+            chart: {
+                plotBackgroundColor: null,
+                plotBorderWidth: null,
+                plotShadow: false
+            },
+            title: {
+                text: ''//'Country Wise Total Cases'
+            },
+            tooltip: {
+                pointFormat: '{series.name}: <b>{point.percentage:.2f}% ({point.value:,.0f} cases)</b>'
+            },
+            accessibility: {
+                point: {
+                    valueSuffix: '%'
+                }
+            },
+            plotOptions: {
+                pie: {
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    startAngle: 180,
+                    dataLabels: {
+                        enabled: true,
+                        format: '<b>{point.name}</b>: {point.percentage:.2f} % ({point.value:,.0f} cases)'
+                    }
+                }
+            },
+            series: [getdata(chartData)]
+        });
+    }
+
+    function getdata(chartData) {
+        var series = {
+            type: 'pie',
+            name: 'Cases',
+            colorByPoint: true,
+            data: []
+        };
+        for (var i = 0; i < chartData.length; i++) {
+            series.data.push({
+                name: chartData[i].ContryName,
+                value: chartData[i].TotalCases,
+                y: chartData[i].TotalCasesPercentage
+            });
+        }
+        return series;
+    }
+
+    function DayWiseTotalCases() {
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetDayWiseCountryData","Home")',
+            data: "{}",
+            dataType: "json",
+            success: function (data) {
+                console.log(data);
+                createDayWiseCountryData(data);
+            },
+            error: function () {
+                console.log('Error');
+            }
+        });
+    }
+
+    function createDayWiseCountryData(data) {
+        var groups = {};
+        for (var i = 0; i < data.length; i++) {
+            var groupName = data[i].CountryName;
+            if (!groups[groupName]) {
+                groups[groupName] = [];
+            }
+            groups[groupName].push(data[i].TotalCases);
+        }
+        myArray = [];
+        for (var groupName in groups) {
+            myArray.push({ name: groupName, data: groups[groupName] });
+        }
+
+        new Highcharts.chart({
+            chart: {
+                renderTo: 'dayContainer',
+                type: 'line',
+                displayErrors: true,
+                marginRight: 130,
+                marginBottom: 25,
+            },
+            title: {
+                text: '',//'Day Wise Number of Cases',
+                x: -20,
+            },
+            subtitle: {
+                text: '',
+                x: -20,
+            },
+            xAxis: {
+                //categories: 'ttt'
+            },
+            yAxis: {
+                title: {
+                    text: 'Patient Count',
+                },
+                plotLines: [{
+                    value: 0,
+                    width: 1,
+                    color: '#808080',
+                }],
+            },
+            tooltip: {
+                formatter: function () {
+                    return '<b>' + this.series.name + '</b><br/>' +
+                        'Day ' + this.x + ': ' + this.y;
+                },
+            },
+            legend: {
+                layout: 'vertical',
+                align: 'right',
+                verticalAlign: 'top',
+                x: -10,
+                y: 100,
+                borderWidth: 0,
+            },
+            series: myArray
+        });
+    }
+
+    function NoofDeathByDay() {
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetNoOfDeathByDay","Home")',
+            data: "{}",
+            dataType: "json",
+            success: function (data) {
+                console.log(data);
+                createNoOfDeath(data);
+            },
+            error: function () {
+                console.log('Error');
+            }
+        });
+    }
+
+    function createNoOfDeath(data) {
+        var groups = {};
+        for (var i = 0; i < data.length; i++) {
+            var groupName = data[i].CountryName;
+            if (!groups[groupName]) {
+                groups[groupName] = [];
+            }
+            groups[groupName].push(data[i].TotalDeath);
+        }
+        myArray = [];
+        for (var groupName in groups) {
+            myArray.push({ name: groupName, data: groups[groupName] });
+        }
+
+        new Highcharts.chart({
+            chart: {
+                renderTo: 'deathContainer',
+                type: 'line',
+                displayErrors: true,
+                marginRight: 130,
+                marginBottom: 25,
+            },
+            title: {
+                text: '',//'Day Wise Number of Deaths',
+                x: -20,
+            },
+            subtitle: {
+                text: '',
+                x: -20,
+            },
+            xAxis: {
+
+            },
+            yAxis: {
+                title: {
+                    text: 'Patient Count',
+                },
+                plotLines: [{
+                    value: 0,
+                    width: 1,
+                    color: '#808080',
+                }],
+            },
+            tooltip: {
+                formatter: function () {
+                    return '<b>' + this.series.name + '</b><br/>' +
+                        'Day ' + this.x + ': ' + this.y;
+                },
+            },
+            legend: {
+                layout: 'vertical',
+                align: 'right',
+                verticalAlign: 'top',
+                x: -10,
+                y: 100,
+                borderWidth: 0,
+            },
+            series: myArray
+        });
+    }
+
+    function DailyNewCases() {
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("DailyNewCases","Home")',
+            data: "{}",
+            dataType: "json",
+            success: function (data) {
+                dailyNewCases(data);
+            },
+            error: function () {
+                console.log('Error');
+            }
+        });
+    }
+
+    function dailyNewCases(data) {
+        var date = [];
+        var newCase = [];
+
+        for (var i = 0; i < data.length; i++) {
+            date.push(data[i].Date);
+            newCase.push(parseFloat(data[i].NewCase));
+        }
+
+        new Highcharts.chart({
+            chart: {
+                renderTo: 'newCaseContainer',
+                type: 'column'
+            },
+            title: {
+                text: '',
+                x: -20,
+            },
+            subtitle: {
+                text: '',
+                x: -20,
+            },
+            xAxis: {
+                categories: date
+            },
+            yAxis: {
+                title: {
+                    text: 'Coronavirus Daily New Cases',
+                }
+            },
+            legend: {
+                layout: 'vertical',
+                align: 'right',
+                verticalAlign: 'middle'
+            },
+            series: [{
+                name: 'Daily Cases',
+                lineWidth: 4,
+                showCheckbox: false,
+                data: newCase
+            }]
+        });
+    }
+</script>
