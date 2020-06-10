@@ -15,6 +15,10 @@ namespace Covid19.Controllers
             return View();
         }
 
+        /// <summary>
+        /// Return list of country wise total cases
+        /// </summary>
+        /// <returns></returns>
         public ActionResult GetCountryWiseData()
         {
 
@@ -24,7 +28,6 @@ namespace Covid19.Controllers
             for (int i = 0; i < CountryWise.Count; i++)
             {
                 var Country = new CountryWiseCases();
-                //Country.CountryId = CountryWise[i].CountryId;
                 Country.ContryName = CountryWise[i].ContryName;
                 Country.TotalCasesPercentage = CountryWise[i].TotalCasesPercentage;
                 Country.TotalCases = CountryWise[i].TotalCases;
@@ -35,6 +38,10 @@ namespace Covid19.Controllers
             return this.Json(lstCountry, JsonRequestBehavior.AllowGet);
         }
 
+        /// <summary>
+        /// Return list of total cases by day
+        /// </summary>
+        /// <returns></returns>
         public ActionResult GetDayWiseCountryData()
         {
             List<CountryWiseTotalCasesByDay> lstCountry = new List<CountryWiseTotalCasesByDay>();
@@ -52,6 +59,10 @@ namespace Covid19.Controllers
             return this.Json(lstCountry, JsonRequestBehavior.AllowGet);
         }
 
+        /// <summary>
+        /// Retunn list of total death by day
+        /// </summary>
+        /// <returns></returns>
         public ActionResult GetNoOfDeathByDay()
         {
             List<NoofDeathByDay> lstDeath = new List<NoofDeathByDay>();
@@ -69,6 +80,10 @@ namespace Covid19.Controllers
             return this.Json(lstDeath, JsonRequestBehavior.AllowGet);
         }
 
+        /// <summary>
+        /// Give the list of daily new cases
+        /// </summary>
+        /// <returns></returns>
         public ActionResult DailyNewCases()
         {
             List<DailyNewCase> lstNewCase = new List<DailyNewCase>();

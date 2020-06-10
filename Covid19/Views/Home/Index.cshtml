@@ -58,7 +58,6 @@
         </div>
     </div>
 </div>
-
 <div class="row">
     <div class="col-xl-12 col-lg-12">
         <div class="card card-chart">
@@ -79,7 +78,7 @@
             </div>
             <div class="card-body">
                 <h4 class="card-title">
-                    Day Wise Number of Cases
+                    Day Wise Cumulative Number of Cases
                 </h4>
             </div>
         </div>
@@ -91,12 +90,11 @@
             </div>
             <div class="card-body">
                 <h4 class="card-title">
-                    Day Wise Number of Deaths
+                    Day Wise Cumulative Number of Deaths
                 </h4>
             </div>
         </div>
     </div>
-
     <div class="col-xl-12 col-lg-12">
         <div class="card card-chart">
             <div class="card-header card-header-info">
@@ -142,7 +140,7 @@
                 plotShadow: false
             },
             title: {
-                text: ''//'Country Wise Total Cases'
+                text: ''
             },
             tooltip: {
                 pointFormat: '{series.name}: <b>{point.percentage:.2f}% ({point.value:,.0f} cases)</b>'
@@ -223,15 +221,12 @@
                 marginBottom: 25,
             },
             title: {
-                text: '',//'Day Wise Number of Cases',
+                text: '',
                 x: -20,
             },
             subtitle: {
                 text: '',
                 x: -20,
-            },
-            xAxis: {
-                //categories: 'ttt'
             },
             yAxis: {
                 title: {
@@ -300,7 +295,7 @@
                 marginBottom: 25,
             },
             title: {
-                text: '',//'Day Wise Number of Deaths',
+                text: '',
                 x: -20,
             },
             subtitle: {
